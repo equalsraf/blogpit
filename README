@@ -1,0 +1,13 @@
+blogpit
+===============
+
+Blogpit is a blog storage backend that stores articles and sections for a blog
+within a Git repository. This implementation is intended to replace the one used
+by django-blogpit. 
+
+
+Dependencies
+---------------
+- libgit2
+- python,  to build the python bindings
+

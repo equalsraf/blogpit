@@ -9,11 +9,8 @@ SET(CMAKE_C_FLAGS_DEBUG "-g -O0 -W -Wall -fPIC -fprofile-arcs -ftest-coverage")
 #
 find_package(PythonLibs)
 find_package(PythonInterp)
-# FIXME: remove hardcoded paths
-# find_library( LIBGIT2 NAMES git2 PATHS "${CMAKE_BINARY_DIR}/../../libgit2/build" )
-# FIXME: Remove the following line
-# include_directories(${CMAKE_SOURCE_DIR}/../libgit2/include)
-# include_directories(${CMAKE_SOURCE_DIR}/src)
+find_library( LIBGIT2 NAMES git2 )
+include_directories(${CMAKE_SOURCE_DIR}/src)
 
 if ( ${LIBGIT2} STREQUAL "LIBGIT2-NOTFOUND" )
 	message(FATAL_ERROR "Unable to find libgit2, are you sure it is installed?")

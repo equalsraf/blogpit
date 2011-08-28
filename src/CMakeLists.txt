@@ -1,9 +1,5 @@
 
 
-# DELETE ME
-include_directories(${CMAKE_BINARY_DIR}/../../libgit2/include)
-
-
 # libblogpit
 set(libblogpit_SOURCES blogpit.c strlcpy.c strlcat.c util.c)
 
