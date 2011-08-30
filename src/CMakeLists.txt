@@ -13,7 +13,7 @@ target_link_libraries( blogpit_shared ${LIBGIT2} )
 
 # blogpitc
 add_executable(blogpitc main.c)
-target_link_libraries( blogpitc ${LIBGIT2} blogpit_static )
+target_link_libraries( blogpitc z blogpit_static )
 
 
 

@@ -3,7 +3,7 @@
 #
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
-set(test_LIBS ${LIBGIT2} ${CMAKE_BINARY_DIR}/src/libblogpit.a)
+set(test_LIBS z blogpit_static)
 
 
 #

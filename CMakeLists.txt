@@ -9,7 +9,7 @@ SET(CMAKE_C_FLAGS_DEBUG "-g -O0 -W -Wall -fPIC -fprofile-arcs -ftest-coverage")
 #
 find_package(PythonLibs)
 find_package(PythonInterp)
-find_library( LIBGIT2 NAMES git2 )
+find_library( LIBGIT2 libgit2.a )
 include_directories(${CMAKE_SOURCE_DIR}/src)
 
 if ( ${LIBGIT2} STREQUAL "LIBGIT2-NOTFOUND" )
