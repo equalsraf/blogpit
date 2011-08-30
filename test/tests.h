@@ -7,6 +7,7 @@
 #include <assert.h>
 #include <errno.h>
 #include <stdio.h>
+#include <string.h>
 
 #define TEST_MAIN(x) int main(void){return x();}
 

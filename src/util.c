@@ -300,10 +300,10 @@ util_get_tree_names(git_repository *repo, const char *branch, const char *path, 
  *
  * @return a char pointer inside the given string or NULL
  */
-static char*
-next_path_component(char *string)
+static const char*
+next_path_component(const char *string)
 {
-	char *s = string;
+	const char *s = string;
 
 	if (!s) {
 		return NULL;
@@ -321,9 +321,9 @@ next_path_component(char *string)
  *
  */
 static ssize_t
-path_component_length(char *string)
+path_component_length(const char *string)
 {
-	char *s = string;
+	const char *s = string;
 	if ( !s ) {
 		return 0;
 	}
@@ -338,7 +338,7 @@ path_component_length(char *string)
 
 
 static int
-__util_create_file( git_repository *repo, git_tree *tree, char *path, 
+__util_create_file( git_repository *repo, git_tree *tree, const char *path, 
 			const char *filename, void *data, size_t datalen, git_oid *oid_out)
 {
 	git_treebuilder *builder;
@@ -364,7 +364,7 @@ __util_create_file( git_repository *repo, git_tree *tree, char *path,
 		}
 	} else {
 		git_tree *next_tree = tree;
-		char *s = next_path_component(path);
+		const char *s = next_path_component(path);
 		ssize_t len = path_component_length(s);
 
 		char comp[len+1];
@@ -441,14 +441,14 @@ util_commit_file(git_repository *repo, const char *branch, const char *path,
 
 	git_tree *tree = util_get_tree(repo, branch, "");
 
-	char *P = path;
+	const char *P = path;
 	if ( strcmp(P, ".") == 0 ) {
 		P = "";
 	}
 
 	git_oid oid;
 	int ret;
-	ret = __util_create_file( repo, tree, (char *)P, filename, data, len, &oid);
+	ret = __util_create_file( repo, tree, P, filename, data, len, &oid);
 	if ( ret != 0 ) {
 		goto error_commit;
 	}
@@ -463,7 +463,7 @@ util_commit_file(git_repository *repo, const char *branch, const char *path,
 	}
 
 
-	char *M = "Blogpit update";
+	const char *M = "Blogpit update";
 	if ( msg != NULL ) {
 		M = msg;
 	}

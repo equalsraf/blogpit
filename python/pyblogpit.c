@@ -20,6 +20,8 @@ typedef struct {
 static int
 __blogpit_init(blogpit_Object *self, PyObject *args, PyObject *kwds)
 {
+	(void) kwds; // UNUSED parameters
+
 	self->B = NULL;
 
 	char *p, *b;
@@ -41,6 +43,9 @@ __blogpit_init(blogpit_Object *self, PyObject *args, PyObject *kwds)
 static PyObject*
 __blogpit_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 {
+	(void) args; // UNUSED parameters
+	(void) kwds;
+
 	blogpit_Object *self;
 
 	self = (blogpit_Object*)type->tp_alloc(type, 0);
@@ -52,8 +57,9 @@ __blogpit_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
 }
 
 static PyObject*
-__blogpit_repr(blogpit_Object *self)
+__blogpit_repr(PyObject *self)
 {
+	(void) self; // UNUSED parameters
 	return PyString_FromFormat("Blogpit");
 }
 
@@ -226,7 +232,7 @@ static PyTypeObject blogpit_Type = {
 //
 
 PyMethodDef moduleMethods[] = {
-	{NULL, NULL},
+	{NULL, NULL, 0, NULL},
 };
 
 void initpyblogpit()
