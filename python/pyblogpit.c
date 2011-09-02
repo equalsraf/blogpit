@@ -170,8 +170,8 @@ __blogpit_setarticle(blogpit_Object *self, PyObject *args)
 		Py_RETURN_FALSE;
 	}
 
+	// FIXME: free msg
 	PyMem_Free(content);
-
 
 	Py_RETURN_TRUE;
 }

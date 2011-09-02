@@ -336,11 +336,28 @@ path_component_length(const char *string)
 	return len;
 }
 
+/**
+ * @eturn 0 if this path is NOT the root i.e.
+ * '/'
+ * '//'
+ * '//...'
+ *
+ */
+static int
+path_is_root(const char *path)
+{
+	const char *s;
+	for ( s=path; *s && *s=='/'; s++ )
+		;;
+
+	return ( *s=='\0' );
+}
 
 static int
 __util_create_file( git_repository *repo, git_tree *tree, const char *path, 
 			const char *filename, void *data, size_t datalen, git_oid *oid_out)
 {
+	int rvalue = -1;
 	git_treebuilder *builder;
 	git_treebuilder_create(&builder, tree);
 
@@ -351,19 +368,19 @@ __util_create_file( git_repository *repo, git_tree *tree, const char *path,
 		const git_tree_entry *entry = git_treebuilder_get(builder, filename);
 		if ( entry && git_tree_entry_type(entry) != GIT_OBJ_BLOB ) {
 			// Already exists and is not a file :S
-			return -1;
+			goto free_builder;
 		}
 		
 		git_oid blob_oid;
 		if ( git_blob_create_frombuffer(&blob_oid, repo, data, datalen) != 0 ) {
-			return -1;
+			goto free_builder;
 		}
 
 		if ( git_treebuilder_insert( NULL, builder, filename, &blob_oid, 0100644) != 0) {
-			return -1;
+			goto free_builder;
 		}
 	} else {
-		git_tree *next_tree = tree;
+		git_tree *next_tree = NULL;
 		const char *s = next_path_component(path);
 		ssize_t len = path_component_length(s);
 
@@ -395,18 +412,21 @@ __util_create_file( git_repository *repo, git_tree *tree, const char *path,
 		}
 
 		if ( ret != 0 ) {
-			return -1;
+			goto free_builder;
 		}
 
 		if ( git_treebuilder_insert( NULL, builder, comp, &dir_oid, 0040000) != 0) {
-			return -1;
+			goto free_builder;
 		}
 	}
 
+	rvalue = 0;
+
 	git_treebuilder_write(oid_out, repo, builder);
+free_builder:
 	git_treebuilder_free(builder);
 
-	return 0;
+	return rvalue;
 }
 
 /**
@@ -442,7 +462,7 @@ util_commit_file(git_repository *repo, const char *branch, const char *path,
 	git_tree *tree = util_get_tree(repo, branch, "");
 
 	const char *P = path;
-	if ( strcmp(P, ".") == 0 ) {
+	if ( strcmp(P, ".") == 0 || path_is_root(P) ) {
 		P = "";
 	}
 
@@ -462,13 +482,13 @@ util_commit_file(git_repository *repo, const char *branch, const char *path,
 		goto error_sig;
 	}
 
-
 	const char *M = "Blogpit update";
 	if ( msg != NULL ) {
 		M = msg;
 	}
 
 	int parent_count = parent ? 1 : 0 ;
+
 	if ( git_commit_create_v(&cid, repo, NULL, author, author, M, tree, parent_count, parent) != 0 ) {
 		goto error_tree;
 	}
