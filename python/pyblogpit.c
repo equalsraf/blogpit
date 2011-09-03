@@ -188,7 +188,7 @@ static PyMethodDef blogpit_methods[] = {
 static PyTypeObject blogpit_Type = {
 	PyObject_HEAD_INIT(NULL)
 	0,                         /*ob_size*/
-	"pyblogpit.Blogpit",       /*tp_name*/
+	"blogpit.Blogpit",       /*tp_name*/
 	sizeof(blogpit_Object),    /*tp_basicsize*/
 	0,                         /*tp_itemsize*/
 	__blogpit_dealloc,           /*tp_dealloc*/
@@ -235,7 +235,7 @@ PyMethodDef moduleMethods[] = {
 	{NULL, NULL, 0, NULL},
 };
 
-void initpyblogpit()
+void initblogpit()
 {
 	PyObject *m;
 
@@ -243,13 +243,13 @@ void initpyblogpit()
 		return;
 	}
 
-	m = Py_InitModule("pyblogpit", moduleMethods);
+	m = Py_InitModule("blogpit", moduleMethods);
 	if ( m == NULL ) {
 		return;
 	}
 
 	// Exception type
-	BlogpitError = PyErr_NewException("pyblogpit.error", NULL, NULL);
+	BlogpitError = PyErr_NewException("blogpit.error", NULL, NULL);
 	Py_INCREF(BlogpitError);
 	PyModule_AddObject(m, "error", BlogpitError);
 

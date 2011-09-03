@@ -2,7 +2,7 @@
 
 from distutils.core import setup, Extension
 
-module1 = Extension('pyblogpit',
+module1 = Extension('blogpit',
                     sources = ['${CMAKE_CURRENT_SOURCE_DIR}/pyblogpit.c'],
                     include_dirs = ['${CMAKE_SOURCE_DIR}/src'],
                     libraries = ['z'],
@@ -10,11 +10,21 @@ module1 = Extension('pyblogpit',
                     extra_compile_args = ['-fPIC'],
                     )
 
-setup(name='pyblogpit',
-      version='0.1',
-      description='Blogpit a Git based blog storage backend',
+setup(name='python-blogpit',
+      version='0.0.0',
+      description='Git based blog storage backend',
       author='Rui Abreu Ferreira',
       author_email='raf-ep@gmx.com',
       url='https://github.com/equalsraf/blogpit',
-      ext_modules = [module1]
+      ext_modules = [module1],
+      classifiers=[
+          'Development Status :: 4 - Beta',
+          'Intended Audience :: Developers',
+          'License :: OSI Approved :: BSD License',
+          'Operating System :: POSIX :: Linux',
+          'Programming Language :: C',
+          'Programming Language :: Python :: 2',
+          'Topic :: Database',
+          ],
+      long_description = 'python-blogpit offers python bindings over the blogpit blog storage library',
      )
