@@ -85,10 +85,10 @@ __blogpit_getarticle(blogpit_Object *self, PyObject *args)
 
 	PyObject *str;
 	if ( data ) {
-		str = PyUnicode_FromStringAndSize(data, len);
+		str = PyString_FromStringAndSize(data, len);
 		free(data);
 	} else {
-		str = PyUnicode_FromString("");
+		str = PyString_FromString("");
 	}
 	return str;
 }
@@ -157,21 +157,21 @@ __blogpit_setarticle(blogpit_Object *self, PyObject *args)
 	char *content = NULL;
 	int content_len;
 	char *msg = NULL;
-	if ( !PyArg_ParseTuple(args, "s" "es#" "|es", 
+	if ( !PyArg_ParseTuple(args, "ss#|es", 
 				&path, 
-				"utf-8", &content, &content_len, 
+				&content, &content_len, 
 				"utf-8", &msg) ) {
 		return NULL;
 	}
 
 	// Cast (size_t) is needed
 	if ( blogpit_setarticle(self->B, path, content, (size_t)content_len, msg) != 0 ) {
-		PyMem_Free(content);
 		Py_RETURN_FALSE;
 	}
 
-	// FIXME: free msg
-	PyMem_Free(content);
+	if ( msg ) {
+		PyMem_Free(msg);
+	}
 
 	Py_RETURN_TRUE;
 }
