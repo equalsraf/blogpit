@@ -284,9 +284,19 @@ util_get_tree_names(git_repository *repo, const char *branch, const char *path, 
 			continue;
 		}
 		if ( git_tree_entry_type(entry) == type ) {
-			char *s = strdup(git_tree_entry_name(entry));
-			if (s )
+			//char *s = strdup(git_tree_entry_name(entry));
+			const char *name = git_tree_entry_name(entry);
+			int slen = strlen(name);
+			char *s = malloc(slen+2);
+
+			if (s ) {
+				// Prefix with slash if it is a directory
+				strlcpy(s, name, slen+1);
+				s[slen+1] = '\0';
+				s[slen] = (type == GIT_OBJ_TREE) ? '/' : 0;
+
 				sections[j++] = s;
+			}
 		}
 	}
 
