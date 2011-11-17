@@ -487,7 +487,12 @@ util_commit_file(git_repository *repo, const char *branch, const char *path,
 	// 
 	// Create commit
 	git_oid cid;
-	git_signature *author = git_signature_now("blogpit", "blog@undisclosed.org");
+	git_signature *author;
+
+	if( git_signature_now( &author, "blogpit", "blog@undisclosed.org") != GIT_SUCCESS) {
+		goto error_commit;
+	}
+
 	if ( git_tree_lookup( &tree, repo, &oid) != 0 ) {
 		goto error_sig;
 	}
@@ -499,7 +504,7 @@ util_commit_file(git_repository *repo, const char *branch, const char *path,
 
 	int parent_count = parent ? 1 : 0 ;
 
-	if ( git_commit_create_v(&cid, repo, NULL, author, author, M, tree, parent_count, parent) != 0 ) {
+	if ( git_commit_create_v(&cid, repo, NULL, author, author, "utf-8", M, tree, parent_count, parent) != 0 ) {
 		goto error_tree;
 	}
 
