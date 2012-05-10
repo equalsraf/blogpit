@@ -13,7 +13,7 @@ find_library( LIBGIT2 libgit2.a )
 include_directories(${CMAKE_SOURCE_DIR}/src)
 
 if ( ${LIBGIT2} STREQUAL "LIBGIT2-NOTFOUND" )
-	message(FATAL_ERROR "Unable to find libgit2, are you sure it is installed?")
+	message(FATAL_ERROR "Unable to find libgit2, are you sure it is installed? We need the STATIC library.")
 endif ( ${LIBGIT2} STREQUAL "LIBGIT2-NOTFOUND" )
 
 

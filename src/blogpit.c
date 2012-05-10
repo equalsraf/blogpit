@@ -117,7 +117,7 @@ blogpit_getarticle(struct blogpit *b, const char *path, size_t *buflen)
 	memcpy( data, git_blob_rawcontent(blob), len);
 	*buflen = len;
 
-	git_blob_close(blob);
+	git_blob_free(blob);
 	return data;
 }
 

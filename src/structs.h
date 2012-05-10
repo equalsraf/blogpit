@@ -10,6 +10,7 @@ struct blogpit
 {
 	git_repository *repo;
 	char *branch;
+	const char *workdir;
 };
 
 #endif

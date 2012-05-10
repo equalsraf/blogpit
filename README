@@ -8,6 +8,10 @@ by django-blogpit.
 
 Dependencies
 ---------------
-- libgit2
-- python,  to build the python bindings
+- libgit2 0.16.0
+- python, to build the python bindings
+
+We link statically against libgit2, so you need to have a static version
+of the library (libgit2.a). 
+
 

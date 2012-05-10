@@ -117,7 +117,7 @@ __util_get_object( git_oid *oid_out, git_repository *repo, const git_oid *commit
 
 	git_tree *tree=NULL;
 	err = git_commit_tree(&tree, commit);
-	git_commit_close(commit);
+	git_commit_free(commit);
 
 	if ( err != 0 ) {
 		return -1;
@@ -143,7 +143,7 @@ __util_get_object( git_oid *oid_out, git_repository *repo, const git_oid *commit
 		// Empty path is valid
 		oid = git_tree_id(tree);
 		git_oid_cpy( oid_out, oid);
-		git_tree_close(tree);
+		git_tree_free(tree);
 		return 0;
 	}
 
@@ -170,7 +170,7 @@ __util_get_object( git_oid *oid_out, git_repository *repo, const git_oid *commit
 		
 		git_tree *old_tree = tree;
 		oid = git_tree_entry_id(tree_entry);
-		git_tree_close(old_tree);
+		git_tree_free(old_tree);
 
 		if ( git_tree_lookup( &tree, repo, oid) != 0 ) {
 			return -1;
@@ -194,7 +194,7 @@ __util_get_object( git_oid *oid_out, git_repository *repo, const git_oid *commit
 
 	rvalue = 0;
 free_tree:
-	git_tree_close(tree);
+	git_tree_free(tree);
 	return rvalue;
 }
 
@@ -300,7 +300,7 @@ util_get_tree_names(git_repository *repo, const char *branch, const char *path, 
 		}
 	}
 
-	git_tree_close(tree);
+	git_tree_free(tree);
 
 	return sections;
 }
@@ -410,7 +410,7 @@ __util_create_file( git_repository *repo, git_tree *tree, const char *path,
 			if ( git_tree_lookup(&next_tree, repo, git_object_id(object)) != 0 ) {
 				return -1;
 			}
-			git_object_close(object);
+			git_object_free(object);
 		}
 
 		git_oid dir_oid;
@@ -418,7 +418,7 @@ __util_create_file( git_repository *repo, git_tree *tree, const char *path,
 						filename, data, datalen, &dir_oid);
 
 		if ( next_tree) {
-			git_tree_close(next_tree);
+			git_tree_free(next_tree);
 		}
 
 		if ( ret != 0 ) {
@@ -482,7 +482,7 @@ util_commit_file(git_repository *repo, const char *branch, const char *path,
 	if ( ret != 0 ) {
 		goto error_commit;
 	}
-	git_tree_close(tree);
+	git_tree_free(tree);
 
 	// 
 	// Create commit
@@ -515,14 +515,14 @@ util_commit_file(git_repository *repo, const char *branch, const char *path,
 
 	rvalue = 0;
 error_tree:
-	git_tree_close(tree);
+	git_tree_free(tree);
 
 error_sig:
 	git_signature_free(author);
 
 error_commit:
 	if ( parent ) {
-		git_commit_close(parent);
+		git_commit_free(parent);
 	}
 error_lookup:
 	return rvalue;
