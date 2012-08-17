@@ -13,9 +13,13 @@ find_library( LIBGIT2 libgit2.a )
 include_directories(${CMAKE_SOURCE_DIR}/src)
 
 if ( ${LIBGIT2} STREQUAL "LIBGIT2-NOTFOUND" )
-	message(FATAL_ERROR "Unable to find libgit2, are you sure it is installed? We need the STATIC library.")
+	message("Unable to find static libgit2, looking for dynamic lib instead")
+	find_library( LIBGIT2 git2)
 endif ( ${LIBGIT2} STREQUAL "LIBGIT2-NOTFOUND" )
 
+if ( ${LIBGIT2} STREQUAL "LIBGIT2-NOTFOUND" )
+	message(FATAL_ERROR "Unable to find libgit2")
+endif ( ${LIBGIT2} STREQUAL "LIBGIT2-NOTFOUND" )
 
 #
 # Doxygen
